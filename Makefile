@@ -1,4 +1,4 @@
-IMAGE=358469521612.dkr.ecr.us-east-1.amazonaws.com/relicstaurants
+IMAGE=358469521612.dkr.ecr.us-east-1.amazonaws.com/relicstaurants:latest
 SERVICE_ARN=arn:aws:apprunner:us-east-1:358469521612:service/relicstaurants/8bb5b34972a24a528a47bc0b0e7dfb59
 
 deploy:

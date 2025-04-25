@@ -1,23 +1,29 @@
+# Stage 1: Build
 FROM public.ecr.aws/docker/library/node:21 AS build
+
 WORKDIR /srv
 
-COPY package-lock.json .
-COPY package.json .
-RUN npm ci
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-ADD . .
-
+# Copy the rest and build
+COPY . .
 RUN npm run build
 
+# Stage 2: Runtime
 FROM public.ecr.aws/docker/library/node:21-slim
+
 RUN apt-get update && apt-get install -y \
-  curl \
-  --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* && apt-get clean
+    curl \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /srv .
+WORKDIR /srv
 
-RUN rm -rf /srv/node_modules
+COPY --from=build /srv/package.json /srv/package-lock.json ./
+COPY --from=build /srv/build ./build
+COPY --from=build /srv/public ./public
+COPY --from=build /srv/server ./server
 
 EXPOSE 3000
 
