@@ -1,13 +1,12 @@
 FROM public.ecr.aws/docker/library/node:21 AS build
 WORKDIR /srv
 
-COPY package.json .
 COPY package-lock.json .
-RUN npm install --omit=dev
+COPY package.json .
+RUN npm ci
 
 ADD . .
 
-# Run build step
 RUN npm run build
 
 FROM public.ecr.aws/docker/library/node:21-slim
