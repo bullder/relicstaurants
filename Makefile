@@ -7,7 +7,7 @@ deploy:
 	@aws apprunner start-deployment --service-arn $(SERVICE_ARN)
 
 loadTest:
-	k6 run simulator/loadTest.js
+	@k6 run simulator/loadTest.js
 
 browserTest:
-	node simulator/test.js
+	@node simulator/test.js

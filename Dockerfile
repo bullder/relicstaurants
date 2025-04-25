@@ -1,25 +1,24 @@
 FROM public.ecr.aws/docker/library/node:21 AS build
 WORKDIR /srv
 
-# Copy package files and install dependencies
-ADD package.json .
-RUN npm install
+COPY package.json .
+COPY package-lock.json .
+RUN npm install --omit=dev
 
-# Copy the rest of the app files for build
 ADD . .
 
 # Run build step
 RUN npm run build
 
-# --- Runtime image ---
 FROM public.ecr.aws/docker/library/node:21-slim
 RUN apt-get update && apt-get install -y \
   curl \
   --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* && apt-get clean
 
-# Copy built app from build stage
 COPY --from=build /srv .
+
+RUN rm -rf /srv/node_modules
 
 EXPOSE 3000
 
