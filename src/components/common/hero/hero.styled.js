@@ -28,5 +28,5 @@ export const StyledHero = styled.div`
   height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url('https://deelaynr.onrender.com/5000/https://i.ibb.co/rvN8Y6j/hero.jpg');
+  background-image: url('https://i.ibb.co/rvN8Y6j/hero.jpg');
 `;

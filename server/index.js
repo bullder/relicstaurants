@@ -1,6 +1,7 @@
 var newrelic = require('newrelic');
 var express = require('express');
 var fs = require('fs');
+const cors = require('cors');
 var open = require('open');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
@@ -28,6 +29,7 @@ var removeMenuItems = function(restaurant) {
 
 exports.start = function(PORT, STATIC_DIR, DATA_FILE) {
   var app = express();
+  app.use(cors());
   var storage = new MemoryStorage();
 
   // log requests

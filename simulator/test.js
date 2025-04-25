@@ -5,7 +5,8 @@ const delay = (ms) => new Promise(res => setTimeout(res, ms));
   const browser = await chromium.launch({ headless: false }); // set to true to run headless
   const context = await browser.newContext();
   const page = await context.newPage();
-  const url = 'http://localhost:3000/';
+  // const url = 'http://localhost:3000/';
+  const url = 'https://relicstaurants.garifull.in/';
   const address = '432 Wiggly Rd, Mountain View, 94043';
 
   while (true) {
