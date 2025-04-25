@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/node:18 AS build
+FROM public.ecr.aws/docker/library/node:21 AS build
 WORKDIR /srv
 
 # Copy package files and install dependencies
@@ -12,7 +12,7 @@ ADD . .
 RUN npm run build
 
 # --- Runtime image ---
-FROM public.ecr.aws/docker/library/node:18-slim
+FROM public.ecr.aws/docker/library/node:21-slim
 RUN apt-get update && apt-get install -y \
   curl \
   --no-install-recommends \
@@ -29,5 +29,6 @@ ENV NEW_RELIC_LOG=stdout
 ENV NEW_RELIC_AI_MONITORING_ENABLED=true
 ENV NEW_RELIC_CUSTOM_INSIGHTS_EVENTS_MAX_SAMPLES_STORED=100k
 ENV NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED=10k
+ENV NEW_RELIC_APP_NAME=relicstaurants
 
 CMD ["node", "./server/start.js"]
