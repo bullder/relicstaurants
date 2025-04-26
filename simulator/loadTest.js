@@ -9,7 +9,9 @@ export const options = {
   ],
 };
 
-const BASE_URL = 'http://localhost:3000/api/restaurant';
+const BASE_DOMAIN = 'https://relicstaurants.garifull.in';
+// const BASE_DOMAIN = 'http://localhost:3000';
+const BASE_URL = BASE_DOMAIN + '/api/restaurant';
 
 export default function () {
   // Test the /api/restaurant endpoint

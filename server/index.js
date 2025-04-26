@@ -6,13 +6,14 @@ var open = require('open');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
-var RestaurantRecord = require('./model').Restaurant;
-var MemoryStorage = require('./storage').Memory;
+const RestaurantRecord = require('./model').Restaurant;
+const MemoryStorage = require('./storage').Memory;
 
-var API_URL = '/api/restaurant';
-var API_URL_ID = API_URL + '/:id';
-var API_URL_ORDER = '/api/order';
-var API_URL_VALIDATION = '/api/validation';
+const API_PREFIX = '/api';
+const API_URL = API_PREFIX + '/restaurant';
+const API_URL_ID = API_URL + '/:id';
+const API_URL_ORDER = API_PREFIX + '/order';
+const API_URL_VALIDATION = API_PREFIX + '/validation';
 
 var removeMenuItems = function(restaurant) {
   var clone = {};
