@@ -9,7 +9,7 @@ export const options = {
   ],
 };
 
-const BASE_DOMAIN = 'https://relicstaurants.garifull.in';
+const BASE_DOMAIN = 'https://new.garifull.in';
 // const BASE_DOMAIN = 'http://localhost:3000';
 const BASE_URL = BASE_DOMAIN + '/api/restaurant';
 

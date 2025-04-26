@@ -6,7 +6,7 @@ const delay = (ms) => new Promise(res => setTimeout(res, ms));
   const context = await browser.newContext();
   const page = await context.newPage();
   // const url = 'http://localhost:3000/';
-  const url = 'https://relicstaurants.garifull.in/';
+  const url = 'https://new.garifull.in/';
   const address = '432 Wiggly Rd, Mountain View, 94043';
 
   while (true) {
