@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 
 const RestaurantRecord = require('./model').Restaurant;
 const MemoryStorage = require('./storage').Memory;
+const SqlStorage = require('./storageSql').Postgres;
 
 const API_PREFIX = '/api';
 const API_URL = API_PREFIX + '/restaurant';
@@ -31,7 +32,19 @@ var removeMenuItems = function(restaurant) {
 exports.start = function(PORT, STATIC_DIR, DATA_FILE) {
   var app = express();
   app.use(cors());
-  var storage = new MemoryStorage();
+  const DB_PASS = process.env.DB_PASS || null
+
+  if (DB_PASS) {
+    var storage = new SqlStorage({
+      user: 'new',
+      password: DB_PASS,
+      host: 'localhost',
+      port: 5432,
+      database: 'new'
+    });
+  } else {
+    var storage = new MemoryStorage();
+  }
 
   // log requests
   app.use(logger('combined'));
@@ -44,8 +57,10 @@ exports.start = function(PORT, STATIC_DIR, DATA_FILE) {
 
 
   // API
-  app.get(API_URL, function(req, res, next) {
-    return res.status(200).send(storage.getAll().map(removeMenuItems));
+  app.get(API_URL, async function(req, res, next) {
+    const a = await storage.getAll();
+
+    return res.status(200).send(a.map(removeMenuItems));
   });
 
 
@@ -76,8 +91,8 @@ exports.start = function(PORT, STATIC_DIR, DATA_FILE) {
   });
 
 
-  app.get(API_URL_ID, function(req, res, next) {
-    var restaurant = storage.getById(req.params.id);
+  app.get(API_URL_ID, async function(req, res, next) {
+    var restaurant = await storage.getById(req.params.id);
 
     if (restaurant) {
       return res.status(200).send(restaurant);
@@ -114,16 +129,21 @@ exports.start = function(PORT, STATIC_DIR, DATA_FILE) {
     return res.status(400).send({error: 'No restaurant with id "' + req.params.id + '"!'});
   });
 
-  // start the server
-  // read the data from json and start the server
-  fs.readFile(DATA_FILE, function(err, data) {
-    JSON.parse(data).forEach(function(restaurant) {
-      storage.add(new RestaurantRecord(restaurant));
-    });
+  if (!DB_PASS) {
+    // start the server
+    // read the data from json and start the server
+    fs.readFile(DATA_FILE, function(err, data) {
+      JSON.parse(data).forEach(function(restaurant) {
+        storage.add(new RestaurantRecord(restaurant));
+      });
 
+      app.listen(PORT, function() {
+        open('http://localhost:' + PORT + '/');
+      });
+    });
+  } else {
     app.listen(PORT, function() {
       open('http://localhost:' + PORT + '/');
     });
-  });
-
+  }
 };
